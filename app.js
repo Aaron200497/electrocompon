@@ -12,7 +12,7 @@ function loadCSVData() {
     .then(response => response.text())
     .then(csvText => {
       // Leer el CSV como string y procesarlo con SheetJS
-      const workbook = XLSX.read(csvText, { type: 'string' fs: ";"});
+      const workbook = XLSX.read(csvText, { type: 'string'});
       const sheetName = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[sheetName];
 
