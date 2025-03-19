@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ElectroCompon</title>
+
+  <!-- Hoja de estilo principal -->
+  <link rel="stylesheet" href="styles.css"/>
+
+  <!-- Librería SheetJS (XLSX) para leer el Excel -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
+
+  <div class="page-container">
+
+    <!-- Header con logo a la izquierda -->
+    <header class="header-top">
+      <div class="logo-container">
+        <img src="logo.png" alt="Logo de la Tienda" class="logo" />
+      </div>
+    </header>
+
+    <!-- Barra de categorías -->
+    <nav id="categoria-list" class="categories-bar"></nav>
+
+    <!-- Sección de productos -->
+    <main>
+      <section id="catalogo"></section>
+    </main>
+
+    <!-- Botón flotante "Info Tienda" -->
+    <button id="btn-info-tienda" class="info-tienda-button">
+      Info Tienda
+    </button>
+
+    <!-- Modal Info Tienda -->
+    <div id="modal-info-tienda" class="modal">
+      <div class="modal-content info-tienda-content">
+        <span class="close">&times;</span>
+
+        <div class="info-row phone-row">
+          TELÉFONOS: 956 59 45 00 / 956 89 54 62
+        </div>
+        <div class="info-row clock-row">
+          (LUNES A VIERNES): 9:30-13:30, 17:30-20:30
+        </div>
+        <div class="info-row mail-row">
+          PEDIDOS@ELECTROCOMPON.COM
+        </div>
+        <div class="info-row address-row">
+          C. José Ramos Borrero, 9, 11100 San Fernando, Cádiz
+        </div>
+        <div class="info-row address-row">
+          C. Prof. Antonio Ramos, 4, 11100 San Fernando, Cádiz
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
