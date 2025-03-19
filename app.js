@@ -1,148 +1,220 @@
-/***************************************************
- * app.js
- * - Carga stock.xlsx
- * - Muestra productos (solo imagen + nombre)
- * - Barra de categorías que filtra productos
- * - Botón "Info Tienda" + Modal
- ***************************************************/
+/****************************************
+ * Array de items que vienen del CSV
+ * (cada fila se espera con { Categoria, Nombre, Imagen })
+ ****************************************/
+let items = [];
 
-let categorias = [];
-
-// Cargar datos del Excel "stock.xlsx" (se añade parámetro para evitar caché)
-function loadExcelData() {
-  fetch('stock.json?t=' + new Date().getTime())
-    .then(response => response.arrayBuffer())
-    .then(arrayBuffer => {
-      const data = new Uint8Array(arrayBuffer);
-      const workbook = XLSX.read(data, { type: 'array' });
+/****************************************
+ * Cargar el CSV "stock.csv"
+ ****************************************/
+function loadCSVData() {
+  fetch('stock.csv')
+    .then(response => response.text())
+    .then(csvText => {
+      // Leer el CSV como string y procesarlo con SheetJS
+      const workbook = XLSX.read(csvText, { type: 'string' });
       const sheetName = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[sheetName];
 
-      // Convertir la hoja a JSON
+      // Convertir la hoja a JSON (cada fila es un objeto)
       const jsonData = XLSX.utils.sheet_to_json(worksheet);
 
-      // Agrupar productos por categoría
-      const catMap = {};
-      jsonData.forEach(row => {
-        let cat = row.Categoria || "Sin categoría";
-        if (!catMap[cat]) {
-          catMap[cat] = [];
-        }
-        catMap[cat].push({
-          nombre: row.Nombre || "Sin nombre",
-          // Campos no mostrados pero guardados
-          precio: row.Precio || "0",
-          imagen: row.Imagen || "",
-          marca: row.Marca || ""
-        });
-      });
+      // Extraer las propiedades: Categoria, Nombre, Imagen
+      items = jsonData.map(row => ({
+        categoria: row.Categoria || "Sin categoría",
+        nombre: row.Nombre || "Sin nombre",
+        imagen: row.Imagen || "images/placeholder.jpg"
+      }));
 
-      // Convertir el objeto en un array de categorías
-      categorias = [];
-      for (let key in catMap) {
-        categorias.push({
-          nombre: key,
-          productos: catMap[key]
-        });
-      }
-
-      // Renderizar la barra de categorías
-      renderCategorias();
-      // Mostrar todos los productos al inicio
-      mostrarProductosLista(getAllProducts());
+      // Renderizar las tarjetas con la data del CSV
+      renderItems();
     })
-    .catch(error => console.error("Error al cargar el Excel:", error));
+    .catch(error => console.error("Error al cargar el CSV:", error));
 }
 
-// Renderizar la barra de categorías
-function renderCategorias() {
-  const navCategorias = document.getElementById("categoria-list");
-  navCategorias.innerHTML = "";
+/****************************************
+ * Renderizar las tarjetas en el grid
+ ****************************************/
+const gridCategorias = document.getElementById("grid-categorias");
 
-  // Crear lista (<ul>)
-  const ul = document.createElement("ul");
+function renderItems() {
+  gridCategorias.innerHTML = "";
+  items.forEach(it => {
+    const card = document.createElement("div");
+    card.className = "categoria-card";
 
-  // Opción "Todo"
-  const liTodo = document.createElement("li");
-  liTodo.textContent = "Todo";
-  liTodo.addEventListener("click", () => {
-    mostrarProductosLista(getAllProducts());
+    const img = document.createElement("img");
+    img.src = it.imagen;
+    img.alt = it.nombre;
+
+    const h3 = document.createElement("h3");
+    h3.textContent = it.nombre;
+
+    card.appendChild(img);
+    card.appendChild(h3);
+
+    gridCategorias.appendChild(card);
   });
-  ul.appendChild(liTodo);
+}
 
-  // Para cada categoría
-  categorias.forEach(cat => {
+/****************************************
+ * Búsqueda con sugerencias (fuzzy)
+ ****************************************/
+const searchInput = document.getElementById("search-input");
+const suggestionsBox = document.getElementById("suggestions");
+
+// Al escribir, mostramos sugerencias
+searchInput.addEventListener("input", () => {
+  const termino = searchInput.value.toLowerCase().trim();
+  if (termino === "") {
+    suggestionsBox.style.display = "none";
+    return;
+  }
+  // Filtrar con fuzzy: busca en el nombre o en la categoría
+  const results = items.filter(it => 
+    fuzzySearch(it.nombre.toLowerCase(), termino) ||
+    fuzzySearch(it.categoria.toLowerCase(), termino)
+  );
+  showSuggestions(results);
+});
+
+// Al presionar Enter, filtramos y renderizamos
+searchInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    const termino = searchInput.value.toLowerCase().trim();
+    if (termino === "") {
+      suggestionsBox.style.display = "none";
+      return;
+    }
+    const results = items.filter(it =>
+      fuzzySearch(it.nombre.toLowerCase(), termino) ||
+      fuzzySearch(it.categoria.toLowerCase(), termino)
+    );
+    // Renderizar solo los resultados filtrados
+    gridCategorias.innerHTML = "";
+    results.forEach(it => {
+      const card = document.createElement("div");
+      card.className = "categoria-card";
+
+      const img = document.createElement("img");
+      img.src = it.imagen;
+      img.alt = it.nombre;
+
+      const h3 = document.createElement("h3");
+      h3.textContent = it.nombre;
+
+      card.appendChild(img);
+      card.appendChild(h3);
+
+      gridCategorias.appendChild(card);
+    });
+    suggestionsBox.style.display = "none";
+  }
+});
+
+// Cerrar sugerencias si se hace clic fuera
+document.addEventListener("click", (e) => {
+  if (!suggestionsBox.contains(e.target) && e.target !== searchInput) {
+    suggestionsBox.style.display = "none";
+  }
+});
+
+/****************************************
+ * Mostrar lista de sugerencias
+ ****************************************/
+function showSuggestions(results) {
+  suggestionsBox.innerHTML = "";
+  if (results.length === 0) {
+    suggestionsBox.style.display = "none";
+    return;
+  }
+  const ul = document.createElement("ul");
+  results.forEach(it => {
     const li = document.createElement("li");
-    li.textContent = cat.nombre;
+    li.textContent = it.nombre;
     li.addEventListener("click", () => {
-      mostrarProductosLista(cat.productos);
+      searchInput.value = it.nombre;
+      suggestionsBox.style.display = "none";
+      // Renderizar solo ese item
+      gridCategorias.innerHTML = "";
+      const card = document.createElement("div");
+      card.className = "categoria-card";
+
+      const img = document.createElement("img");
+      img.src = it.imagen;
+      img.alt = it.nombre;
+
+      const h3 = document.createElement("h3");
+      h3.textContent = it.nombre;
+
+      card.appendChild(img);
+      card.appendChild(h3);
+
+      gridCategorias.appendChild(card);
     });
     ul.appendChild(li);
   });
-
-  navCategorias.appendChild(ul);
+  suggestionsBox.appendChild(ul);
+  suggestionsBox.style.display = "block";
 }
 
-// Obtener todos los productos
-function getAllProducts() {
-  let all = [];
-  categorias.forEach(cat => {
-    all = all.concat(cat.productos);
-  });
-  return all;
+/****************************************
+ * FuzzySearch (Levenshtein <= 2)
+ ****************************************/
+function fuzzySearch(str, query) {
+  // Coincidencia por subcadena
+  if (str.includes(query)) return true;
+  // O Levenshtein <= 2
+  return levenshteinDistance(str, query) <= 2;
 }
 
-// Mostrar productos en #catalogo (solo imagen + nombre)
-function mostrarProductosLista(productos) {
-  const catalogo = document.getElementById("catalogo");
-  catalogo.innerHTML = "";
-
-  // Si no hay resultados, mensaje
-  if (productos.length === 0) {
-    catalogo.innerHTML = "<p>No se han encontrado resultados</p>";
-    return;
+function levenshteinDistance(a, b) {
+  const dp = [];
+  for (let i = 0; i <= a.length; i++) {
+    dp[i] = [i];
   }
-
-  // Crear cada tarjeta de producto
-  productos.forEach(prod => {
-    const divProd = document.createElement("div");
-    divProd.className = "producto";
-
-    // Imagen
-    const img = document.createElement("img");
-    img.src = prod.imagen ? prod.imagen : "images/placeholder.jpg";
-    img.alt = prod.nombre;
-
-    // Nombre
-    const nombre = document.createElement("h3");
-    nombre.textContent = prod.nombre.toUpperCase();
-
-    // Ensamblar
-    divProd.appendChild(img);
-    divProd.appendChild(nombre);
-
-    catalogo.appendChild(divProd);
-  });
+  for (let j = 1; j <= b.length; j++) {
+    dp[0][j] = j;
+  }
+  for (let i = 1; i <= a.length; i++) {
+    for (let j = 1; j <= b.length; j++) {
+      if (a[i - 1] === b[j - 1]) {
+        dp[i][j] = dp[i - 1][j - 1];
+      } else {
+        dp[i][j] = 1 + Math.min(
+          dp[i - 1][j],
+          dp[i][j - 1],
+          dp[i - 1][j - 1]
+        );
+      }
+    }
+  }
+  return dp[a.length][b.length];
 }
 
-// Modal "Info Tienda"
-const btnInfoTienda = document.getElementById("btn-info-tienda");
-const modalInfoTienda = document.getElementById("modal-info-tienda");
-const closeInfo = modalInfoTienda.querySelector(".close");
+/****************************************
+ * MODAL INFO TIENDA
+ ****************************************/
+const btnUser = document.getElementById("btn-user");
+const modalInfo = document.getElementById("modal-info");
+const modalClose = document.getElementById("modal-close");
 
-btnInfoTienda.addEventListener("click", () => {
-  modalInfoTienda.style.display = "flex";
+btnUser.addEventListener("click", () => {
+  modalInfo.style.display = "flex";
 });
 
-closeInfo.addEventListener("click", () => {
-  modalInfoTienda.style.display = "none";
+modalClose.addEventListener("click", () => {
+  modalInfo.style.display = "none";
 });
 
 window.addEventListener("click", (e) => {
-  if (e.target === modalInfoTienda) {
-    modalInfoTienda.style.display = "none";
+  if (e.target === modalInfo) {
+    modalInfo.style.display = "none";
   }
 });
 
-// Inicializar al cargar la página
-loadExcelData();
+/****************************************
+ * Iniciar la carga del CSV
+ ****************************************/
+loadCSVData();
