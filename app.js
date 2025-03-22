@@ -1,5 +1,5 @@
 /***************************************************
- * app.js
+ * app.js (versión con Papa Parse)
  * - Carga stock.csv (o stock.xlsx convertido a CSV)
  * - Muestra productos (solo imagen y nombre)
  * - Barra de categorías que filtra productos
@@ -11,18 +11,30 @@ let categorias = [];
 
 // Cargar datos del CSV "stock.csv" (se añade parámetro para evitar caché)
 function loadCSVData() {
-  fetch('stock.csv?t=' + new Date().getTime())
-    .then(response => response.text())
+  fetch('stock.csv?t=' + Date.now())
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`Error al cargar el CSV: ${response.status}`);
+      }
+      return response.text();
+    })
     .then(csvData => {
-      // Usamos la librería XLSX para leer el CSV (tipo 'string')
-      const workbook = XLSX.read(csvData, { type: 'string' });
-      const sheetName = workbook.SheetNames[0];
-      const worksheet = workbook.Sheets[sheetName];
-      const jsonData = XLSX.utils.sheet_to_json(worksheet);
+      console.log("CSV Data raw:", csvData);
+      // Remover BOM si existe
+      if (csvData.charCodeAt(0) === 0xFEFF) {
+        csvData = csvData.slice(1);
+      }
+      // Parsear el CSV usando Papa Parse
+      const result = Papa.parse(csvData, {
+        header: true,
+        skipEmptyLines: true,
+        delimiter: ","  // Ajusta si tu CSV usa otro delimitador, por ejemplo ";"
+      });
+      console.log("Datos parseados con Papa Parse:", result.data);
 
       // Agrupar productos por categoría
       const catMap = {};
-      jsonData.forEach(row => {
+      result.data.forEach(row => {
         let cat = row.Categoria || "Sin categoría";
         if (!catMap[cat]) {
           catMap[cat] = [];
@@ -30,13 +42,11 @@ function loadCSVData() {
         catMap[cat].push({
           nombre: row.Nombre || "Sin nombre",
           imagen: row.Imagen || "",
-          // Se conservan otros campos por si se requieren en el futuro
           precio: row.Precio || "0",
           marca: row.Marca || ""
         });
       });
 
-      // Convertir el objeto en un array de categorías
       categorias = [];
       for (let key in catMap) {
         categorias.push({
@@ -44,10 +54,9 @@ function loadCSVData() {
           productos: catMap[key]
         });
       }
+      console.log("Categorías agrupadas:", categorias);
 
-      // Renderizar la barra de categorías
       renderCategorias();
-      // Mostrar todos los productos al inicio
       mostrarProductosLista(getAllProducts());
     })
     .catch(error => console.error("Error al cargar el CSV:", error));
@@ -58,7 +67,6 @@ function renderCategorias() {
   const navCategorias = document.getElementById("categoria-list");
   navCategorias.innerHTML = "";
 
-  // Crear lista (<ul>)
   const ul = document.createElement("ul");
 
   // Opción "Todo"
@@ -96,27 +104,23 @@ function mostrarProductosLista(productos) {
   const catalogo = document.getElementById("catalogo");
   catalogo.innerHTML = "";
 
-  // Si no hay resultados, mensaje
   if (productos.length === 0) {
     catalogo.innerHTML = "<p>No se han encontrado resultados</p>";
     return;
   }
 
-  // Crear cada tarjeta de producto
   productos.forEach(prod => {
+    console.log("Mostrando producto:", prod.nombre, "con imagen:", prod.imagen);
     const divProd = document.createElement("div");
     divProd.className = "producto";
 
-    // Imagen
     const img = document.createElement("img");
     img.src = prod.imagen ? prod.imagen : "images/placeholder.jpg";
     img.alt = prod.nombre;
 
-    // Nombre
     const nombre = document.createElement("h3");
     nombre.textContent = prod.nombre.toUpperCase();
 
-    // Ensamblar tarjeta
     divProd.appendChild(img);
     divProd.appendChild(nombre);
     catalogo.appendChild(divProd);
@@ -142,5 +146,4 @@ window.addEventListener("click", (e) => {
   }
 });
 
-// Inicializar al cargar la página
 loadCSVData();
