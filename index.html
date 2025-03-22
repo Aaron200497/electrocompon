@@ -3,19 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ElectroCompon</title>
-
+  <title>Electrocompon</title>
   <!-- Hoja de estilo principal -->
   <link rel="stylesheet" href="styles.css"/>
-
-  <!-- Librería SheetJS (XLSX) para leer el Excel -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <!-- Librería SheetJS (XLSX) para leer CSV/Excel -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
 </head>
 <body>
 
+  <!-- Contenedor principal -->
   <div class="page-container">
 
-    <!-- Header con logo a la izquierda -->
+    <!-- Encabezado con el logo en la esquina superior izquierda -->
     <header class="header-top">
       <div class="logo-container">
         <img src="logo.png" alt="Logo de la Tienda" class="logo" />
@@ -25,7 +24,7 @@
     <!-- Barra de categorías -->
     <nav id="categoria-list" class="categories-bar"></nav>
 
-    <!-- Sección de productos -->
+    <!-- Sección principal de productos -->
     <main>
       <section id="catalogo"></section>
     </main>
@@ -35,11 +34,13 @@
       Info Tienda
     </button>
 
-    <!-- Modal Info Tienda -->
+    <!-- Modal para la info de la tienda -->
     <div id="modal-info-tienda" class="modal">
       <div class="modal-content info-tienda-content">
+        <!-- Botón para cerrar modal -->
         <span class="close">&times;</span>
 
+        <!-- Información de contacto -->
         <div class="info-row phone-row">
           TELÉFONOS: 956 59 45 00 / 956 89 54 62
         </div>
@@ -58,8 +59,9 @@
       </div>
     </div>
 
-  </div>
+  </div> <!-- Fin .page-container -->
 
+  <!-- Script principal -->
   <script src="app.js"></script>
 </body>
 </html>
