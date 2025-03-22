@@ -1,36 +1,35 @@
-Tabla 1
-Categoria;Nombre;Imagen;;
-Electrodomesticos;Frigorifico;Imagen/figorifico.jpeg;;
-Electrodomesticos;Horno;Imagen/Horno.jpeg;;
-Electrodomesticos;Lavadora;Imagen/Lavadora.jpeg;;
-Electrodomesticos;Lavaplatos;Imagen/Lavaplatos.jpeg;;
-Electrodomesticos;Calefactor;Imagen/Calefactor.jpeg;;
-Pequeños Electrodomesticos;Plancha;Imagen/Plancha.jpeg;;
-Pequeños Electrodomesticos;Microondas;Imagen/Microondas .jpeg;;
-Pequeños Electrodomesticos;Aspiradora;Imagen/Aspiradora.jpeg;;
-Pequeños Electrodomesticos;Ventilador;Imagen/Ventilador.jpeg;;
-Pequeños Electrodomesticos;Tostadora;Imagen/Tostadora .jpeg;;
-Pequeños Electrodomesticos;Cafetera;Imagen/Cafetera.jpeg;;
-Pequeños Electrodomesticos;Secador de pelo;Imagen/Secador.jpeg;;
-Pequeños Electrodomesticos;Alisadora de pelo;Imagen/Alisador.jpeg;;
-Pequeños Electrodomesticos;Manta electrica;Imagen/Manta.jpeg;;
-Pequeños Electrodomesticos;Afeitadora;Imagen/afeitadora .jpeg;;
-Electricidad;Bombillas;Imagen/Bombilla.jpeg;;
-Electricidad;Cables de todo tipo;Imagen/Cable.jpeg;;
-Electricidad;Mecanismos del Hogar;Imagen/MH.jpeg;;
-Electricidad;Mecanismo de Cuadro Electrico;Imagen/mc.jpeg;;
-Electricidad;Tubos para cables;Imagen/tubo.jpeg;;
-Electricidad;Herraminetas;Imagen/Herramientas.jpeg;;
-Electricidad;Regletas distintos tamaños;Imagen/Regleta.jpeg;;
-Electronica;Componentes electronicos Varios;Imagen/Componentes.jpeg;;
-Informatica;Camaras de seguridad;Imagen/Camara.jpeg;;
-Informatica;Router;Imagen/router.jpeg;;
-Informatica;Teclados;Imagen/teclado.jpeg;;
-Informatica;Raton;Imagen/raton.jpeg;;
-Informatica;Conectores RJ45;Imagen/Rj45.jpeg;;
-Informatica;Spray Aire Comprimido para limpieza;Imagen/spray.jpeg;;
-Informatica;Cables de video;Imagen/cablesvideo.jpeg;;
-Informatica;Cables de red;Imagen/cablesred.jpeg;;
-Sonidos y TV;Altavoces;Imagen/Altavoz.jpeg;;
-Sonidos y TV;Televiciones;Imagen/tv.jpeg;;
-Servicios;Reparaciones de equipos electrinicos;Imagen/reparaciones.jpeg;;
+Categoria;Nombre;Imagen
+Electrodomesticos;Frigorifico;Imagen/figorifico.jpeg
+Electrodomesticos;Horno;Imagen/Horno.jpeg
+Electrodomesticos;Lavadora;Imagen/Lavadora.jpeg
+Electrodomesticos;Lavaplatos;Imagen/Lavaplatos.jpeg
+Electrodomesticos;Calefactor;Imagen/Calefactor.jpeg
+Pequeños Electrodomesticos;Plancha;Imagen/Plancha.jpeg
+Pequeños Electrodomesticos;Microondas;Imagen/Microondas .jpeg
+Pequeños Electrodomesticos;Aspiradora;Imagen/Aspiradora.jpeg
+Pequeños Electrodomesticos;Ventilador;Imagen/Ventilador.jpeg
+Pequeños Electrodomesticos;Tostadora;Imagen/Tostadora .jpeg
+Pequeños Electrodomesticos;Cafetera;Imagen/Cafetera.jpeg
+Pequeños Electrodomesticos;Secador de pelo;Imagen/Secador.jpeg
+Pequeños Electrodomesticos;Alisadora de pelo;Imagen/Alisador.jpeg
+Pequeños Electrodomesticos;Manta electrica;Imagen/Manta.jpeg
+Pequeños Electrodomesticos;Afeitadora;Imagen/afeitadora .jpeg
+Electricidad;Bombillas;Imagen/Bombilla.jpeg
+Electricidad;Cables de todo tipo;Imagen/Cable.jpeg
+Electricidad;Mecanismos del Hogar;Imagen/MH.jpeg
+Electricidad;Mecanismo de Cuadro Electrico;Imagen/mc.jpeg
+Electricidad;Tubos para cables;Imagen/tubo.jpeg
+Electricidad;Herraminetas;Imagen/Herramientas.jpeg
+Electricidad;Regletas distintos tamaños;Imagen/Regleta.jpeg
+Electronica;Componentes electronicos Varios;Imagen/Componentes.jpeg
+Informatica;Camaras de seguridad;Imagen/Camara.jpeg
+Informatica;Router;Imagen/router.jpeg
+Informatica;Teclados;Imagen/teclado.jpeg
+Informatica;Raton;Imagen/raton.jpeg
+Informatica;Conectores RJ45;Imagen/Rj45.jpeg
+Informatica;Spray Aire Comprimido para limpieza;Imagen/spray.jpeg
+Informatica;Cables de video;Imagen/cablesvideo.jpeg
+Informatica;Cables de red;Imagen/cablesred.jpeg
+Sonidos y TV;Altavoces;Imagen/Altavoz.jpeg
+Sonidos y TV;Televiciones;Imagen/tv.jpeg
+Servicios;Reparaciones de equipos electrinicos;Imagen/reparaciones.jpeg
