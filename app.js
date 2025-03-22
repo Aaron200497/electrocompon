@@ -115,7 +115,7 @@ function mostrarProductosLista(productos) {
     divProd.className = "producto";
 
     const img = document.createElement("img");
-    img.src = prod.imagen ? prod.imagen : "images/placeholder.jpg";
+    img.src = prod.imagen ? prod.imagen : "images/placeholder.jpeg";
     img.alt = prod.nombre;
 
     const nombre = document.createElement("h3");
