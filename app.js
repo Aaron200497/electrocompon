@@ -11,7 +11,7 @@ let categorias = [];
 
 // Cargar datos del CSV "stock.csv" (se añade parámetro para evitar caché)
 function loadCSVData() {
-  fetch('stock.csv?t=' + Date.now())
+  fetch('Stock.csv?t=' + Date.now())
     .then(response => {
       if (!response.ok) {
         throw new Error(`Error al cargar el CSV: ${response.status}`);
