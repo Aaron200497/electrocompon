@@ -24,7 +24,7 @@ body {
 .header-top {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   padding: 20px;
 }
 
@@ -33,7 +33,7 @@ body {
 }
 
 .logo {
-  height: 80px;  /* Logo agrandado */
+  height: 100px;  /* Logo agrandado */
   width: auto;
 }
 
@@ -201,7 +201,7 @@ main {
 
 /* Email (rectángulo negro) */
 .mail-row {
-  background-color: #000;
+  background-color: #3be6c6;
   color: #fff;
   padding: 10px;
   border-radius: 8px;
