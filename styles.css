@@ -228,3 +228,13 @@ main {
   background-color: #58CE7B;
   border-radius: 50%;
 }
+.footer {
+  text-align: center;
+  padding: 15px;
+  background-color: #ffffff;
+  color: #444;
+  font-size: 14px;
+  font-weight: normal;
+  border-top: 1px solid #ddd;
+  margin-top: 40px;
+}
